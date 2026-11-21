@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
 <meta name="theme-color" content="#f7f8f5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Bol Bhai!">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
 <meta name="description" content="Bol Bhai! A free, offline Heads Up-style party game with easy English words, Bollywood movies and Indian favourites.">
 <title>Bol Bhai! — The Indian party guessing game</title>
 <style>
@@ -78,7 +84,9 @@ header{display:flex;align-items:center;justify-content:space-between;gap:18px}
 .game-stat small{display:block;font-weight:800;font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:4px}
 .game-stat strong{font-size:28px;font-variant-numeric:tabular-nums;line-height:1.2;font-weight:850}
 .right-stat{text-align:right}
-.game-top button{width:42px;height:42px;border:1px solid var(--line);background:var(--paper);border-radius:11px;font-size:17px}
+.game-top-actions{display:flex;align-items:center;gap:8px}
+.game-top button{width:42px;height:42px;border:1px solid var(--line);background:var(--paper);border-radius:11px;font-size:17px;display:grid;place-items:center}
+.game-top button#fullscreenBtn{font-size:20px}
 .timebar{height:5px;background:#e0e7e0;margin-top:14px;border-radius:4px;overflow:hidden}
 .timebar div{background:var(--accent);height:100%;width:100%;transition:width .1s linear}
 .game-card{flex:1;min-height:260px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;background:var(--accent);border-radius:23px;color:#fff;margin:22px 0 15px;padding:35px 20px;position:relative;overflow:hidden;touch-action:pan-y}
@@ -88,7 +96,11 @@ header{display:flex;align-items:center;justify-content:space-between;gap:18px}
 .word.verylong{font-size:clamp(25px,5.5vw,52px);letter-spacing:-.8px}
 .hint{position:absolute;bottom:24px;left:14px;right:14px;font-size:11px;color:#d1e8dd}
 .game-card.correct{background:#267c5d}
-.game-card.skip{background:#ad5c51}
+.game-card.skip{background:#b64d48}
+.feedback-banner{display:none;position:absolute;bottom:clamp(18px,5vh,46px);left:15px;right:15px;z-index:2;font-size:clamp(23px,4vw,46px);font-weight:900;letter-spacing:.03em;color:#fff;text-align:center;text-shadow:0 1px 2px #0002;line-height:1.15;pointer-events:none}
+.game-card.correct .feedback-banner,.game-card.skip .feedback-banner{display:block}
+.game-card.correct .hint,.game-card.skip .hint{display:none}
+.game-card.correct .word,.game-card.skip .word{transform:translateY(-10px)}
 .game-controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .action-btn{min-height:78px;font-size:17px;font-weight:800;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px}
 .skip-btn{background:#fff;border:1px solid var(--line);color:var(--ink)}
@@ -127,6 +139,42 @@ header{display:flex;align-items:center;justify-content:space-between;gap:18px}
 .pause-cover .textbtn{color:#e0e9e3;margin-top:16px;font-size:13px}
 .toast{display:none;position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:35;background:var(--ink);color:#fff;border-radius:10px;padding:12px 18px;max-width:calc(100% - 30px);min-width:170px;font-size:12px;text-align:center;box-shadow:0 8px 27px #0002}
 .toast.show{display:block}
+.fullscreen-help{position:fixed;inset:0;z-index:36;background:#101812bb;display:none;align-items:center;justify-content:center;padding:24px}
+.fullscreen-help.active{display:flex}
+.fullscreen-help-content{background:var(--paper);color:var(--ink);border-radius:20px;padding:26px;max-width:390px;width:100%;box-shadow:0 25px 80px #0003}
+.fullscreen-help-content h2{font-size:25px;margin:0 0 12px;letter-spacing:-.6px}
+.fullscreen-help-content p{font-size:14px;color:var(--muted);line-height:1.6}
+.fullscreen-help-content .primary{margin-top:20px}
+@media(orientation:landscape) and (max-height:640px){
+  .play-screen.active{display:grid;grid-template-columns:clamp(78px,14vw,128px) minmax(0,1fr) clamp(78px,14vw,128px);grid-template-rows:auto 5px minmax(0,1fr) auto;column-gap:clamp(8px,1.3vw,17px);row-gap:clamp(5px,1.5vh,11px);height:100svh;min-height:0;max-width:none;overflow:hidden;padding:max(7px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(7px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+  .game-top{grid-column:1/-1;grid-row:1;min-height:36px;gap:9px}
+  .game-top-actions{gap:7px}
+  .game-top button{width:35px;height:35px;font-size:16px;border-radius:9px}
+  .game-stat{min-width:70px}
+  .game-stat small{font-size:9px;margin-bottom:2px}
+  .game-stat strong{font-size:23px}
+  .timebar{grid-column:1/-1;grid-row:2;margin:0}
+  .game-card{grid-column:2;grid-row:3;margin:0;min-height:0;padding:16px 14px;border-radius:18px}
+  .card-category{margin-bottom:clamp(6px,2.1vh,15px);font-size:clamp(9px,1.5vw,12px)}
+  .word{font-size:clamp(38px,7.6vw,90px);letter-spacing:-2px;line-height:1.03}
+  .word.long{font-size:clamp(29px,5.4vw,67px)}
+  .word.verylong{font-size:clamp(22px,4.25vw,51px)}
+  .hint{bottom:12px;font-size:10px}
+  .game-controls{display:contents}
+  .action-btn{grid-row:3;min-height:0;height:100%;padding:8px 4px;font-size:clamp(12px,1.7vw,17px);border-radius:15px;flex-direction:column;gap:6px;text-align:center}
+  .skip-btn{grid-column:1}
+  .correct-btn{grid-column:3}
+  .motion-status{grid-column:1/-1;grid-row:4;margin:0;min-height:20px;font-size:10px;line-height:1.3}
+  .motion-reset{font-size:10px;padding:3px 7px}
+  .feedback-banner{bottom:clamp(15px,6vh,35px);font-size:clamp(22px,4.1vw,44px)}
+  .game-card.correct .word,.game-card.skip .word{transform:translateY(-7px)}
+}
+@media(orientation:landscape) and (max-height:350px){
+  .motion-status{font-size:9px;min-height:16px}
+  .game-stat small{display:none}
+  .game-card{padding:10px}
+  .feedback-banner{bottom:11px;font-size:clamp(19px,3vw,32px)}
+}
 @media(max-width:560px){.app{padding:23px 17px 132px}.hero{margin:43px 0 29px}.hero h1{font-size:clamp(39px,9.7vw,51px)}.panel{padding:18px 15px}.category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cat{padding:13px 10px;min-height:88px}.cat-emoji{font-size:19px}.cat-title{font-size:12px}.iconbtn{font-size:11px}.setting{align-items:flex-start;flex-direction:column}.start-area{padding-left:17px;padding-right:17px}.game-card{margin:19px 0 13px}.word{font-size:clamp(40px,11vw,64px)}.action-btn{min-height:76px}.result-buttons{grid-template-columns:1fr}}
 @media(max-width:355px){.cat-emoji{display:none}.cat{padding:12px}.timechips{gap:5px}.chip{padding:8px 11px}.game-card{padding:25px 12px}.action-btn{font-size:14px}}
 @media(orientation:landscape) and (max-height:520px){.play-screen{padding-top:9px}.game-card{margin:10px 0;min-height:110px}.card-category{margin-bottom:8px}.hint{display:none}.action-btn{min-height:53px}.game-note{display:none}.word{font-size:clamp(35px,7vw,65px)}}
@@ -147,14 +195,22 @@ header{display:flex;align-items:center;justify-content:space-between;gap:18px}
   <section class="hero"><span class="eyebrow">Your next game night</span><h1>Simple words.<br><em>Big laughs.</em></h1><p>Hold up your phone, get your friends to describe the word, and guess before time runs out. Everyday English meets Bollywood and India.</p></section>
   <section class="panel"><div class="sectionhead"><h2>Choose categories</h2><div class="tiny-actions"><button class="textbtn" id="allBtn">Select all</button><button class="textbtn" id="clearBtn">Clear</button></div></div><div class="category-grid" id="categories"></div><p id="selectionCount" class="subtle" aria-live="polite"></p></section>
   <section class="panel"><div class="sectionhead"><h2>Round settings</h2></div><div class="setting"><span class="settinglabel">Time per round</span><div class="timechips" id="timeChoices"><button class="chip" data-time="30">30s</button><button class="chip active" data-time="60">60s</button><button class="chip" data-time="90">90s</button><button class="chip" data-time="120">2m</button></div></div><div class="toggle-row tilt-feature"><div class="toggle-info"><strong>Heads Up tilt controls</strong><small>On by default. Hold the phone against your forehead. Tilt the screen down for Correct, up for Pass. iPhone may ask for permission when you start.</small></div><button id="tiltSwitch" role="switch" aria-checked="true" class="switch on" aria-label="Enable tilt controls"><span></span></button></div><details class="more-settings"><summary>More options</summary><div class="toggle-row"><div class="toggle-info"><strong>Reverse tilt direction</strong><small>Switch this on if down and up register backwards on your phone.</small></div><button id="reverseSwitch" role="switch" aria-checked="false" class="switch" aria-label="Reverse tilt direction"><span></span></button></div><div class="toggle-row"><div class="toggle-info"><strong>Sound effects</strong><small>Play short sounds for correct guesses and passes.</small></div><button id="soundSwitch" role="switch" aria-checked="true" class="switch on" aria-label="Enable sound effects"><span></span></button></div></details></section>
-  <div class="instructions"><strong>How to play:</strong> Hold your phone sideways against your forehead, screen facing your friends. They give you clues. Tilt the screen <strong>down for Correct</strong> or <strong>up to Pass</strong>, then return to the middle. You can still tap the buttons or swipe.</div>
+  <div class="instructions"><strong>How to play:</strong> Rotate to landscape and hold your phone against your forehead, screen facing your friends. They give you clues. Tilt the screen <strong>down for Correct</strong> or <strong>up to Pass</strong>, then return to the middle. You can still tap the buttons or swipe.</div>
   <div class="start-area"><div class="start-inner"><button class="primary" id="startBtn">Start playing <span aria-hidden="true">→</span></button><p class="start-foot">No sign-up · Free to play · Works offline</p></div></div>
 </main>
-<section id="game" class="play-screen screen" aria-label="Playing round"><div class="game-top"><div class="game-stat"><small>Time left</small><strong id="timerText">1:00</strong></div><button id="pauseBtn" aria-label="Pause round">Ⅱ</button><div class="game-stat right-stat"><small>Score</small><strong id="scoreText">0</strong></div></div><div class="timebar"><div id="timeBar"></div></div><div class="game-card" id="gameCard"><span class="card-category" id="currentCategory">Everyday English</span><div class="word" id="currentWord">Ready?</div><div class="hint">Tilt screen down ✓ · Tilt up to pass ↶</div></div><div class="game-controls"><button class="action-btn skip-btn" id="skipBtn">↶ Pass</button><button class="action-btn correct-btn" id="correctBtn">✓ Correct</button></div><div id="tiltStatus" class="motion-status" role="status" aria-live="polite"><span><span class="motion-dot" id="tiltDot"></span><span id="tiltStatusText">Preparing motion sensor…</span></span><button id="resetTiltBtn" type="button" class="motion-reset">Recalibrate</button></div></section>
+<section id="game" class="play-screen screen" aria-label="Playing round"><div class="game-top"><div class="game-stat"><small>Time left</small><strong id="timerText">1:00</strong></div><div class="game-top-actions"><button id="fullscreenBtn" aria-label="Enter fullscreen" title="Fullscreen" aria-pressed="false">⛶</button><button id="pauseBtn" aria-label="Pause round" title="Pause">Ⅱ</button></div><div class="game-stat right-stat"><small>Score</small><strong id="scoreText">0</strong></div></div><div class="timebar"><div id="timeBar"></div></div><div class="game-card" id="gameCard"><span class="card-category" id="currentCategory">Everyday English</span><div class="word" id="currentWord">Ready?</div><div class="hint">Tilt down ✓ · Up to pass ↶</div><div id="answerFeedback" class="feedback-banner" aria-live="polite" aria-atomic="true"></div></div><div class="game-controls"><button class="action-btn skip-btn" id="skipBtn">↶ Pass</button><button class="action-btn correct-btn" id="correctBtn">✓ Correct</button></div><div id="tiltStatus" class="motion-status" role="status" aria-live="polite"><span><span class="motion-dot" id="tiltDot"></span><span id="tiltStatusText">Preparing motion sensor…</span></span><button id="resetTiltBtn" type="button" class="motion-reset">Recalibrate</button></div></section>
 <section id="results" class="result screen"><div class="result-top"><div class="trophy">★</div><h1>Round complete.</h1><p>Nice playing! Here's how you did.</p></div><div class="score-display"><div class="score-box won"><strong id="finalScore">0</strong><small>Correct</small></div><div class="score-box missed"><strong id="finalSkipped">0</strong><small>Passed</small></div></div><div class="review"><h2>Words you guessed</h2><div class="word-list" id="correctReview"></div></div><div class="review"><h2>Words you passed</h2><div class="word-list" id="skipReview"></div></div><div class="result-buttons"><button class="secondary" id="homeBtn">Change categories</button><button class="primary" id="againBtn">Play again →</button></div></section>
 <div class="countdown" id="countdown"><div class="num" id="countdownNumber">3</div><h2>Get ready</h2><p>Put the phone on your forehead with its screen facing your friends. Keep it steady when the first word appears.</p></div>
 <div class="pause-cover" id="pauseCover"><div class="pause-box"><div style="font-size:38px">Ⅱ</div><h2>Paused</h2><p>Take a break. Your timer is stopped.</p><button class="primary" id="resumeBtn">Resume round →</button><button class="textbtn" id="endBtn">End round early</button></div></div>
 <div class="toast" id="toast" role="status"></div>
+<div class="fullscreen-help" id="fullscreenHelp" role="dialog" aria-modal="true" aria-labelledby="fullscreenHelpTitle">
+  <div class="fullscreen-help-content">
+    <h2 id="fullscreenHelpTitle">Play without browser bars</h2>
+    <p><strong>On iPhone:</strong> Safari doesn't support fullscreen for regular websites. Tap the Share button, choose <strong>Add to Home Screen</strong>, then open Bol Bhai! from your Home Screen to play like an app.</p>
+    <p><strong>On Android:</strong> Tap the fullscreen icon again, or choose <strong>Add to Home screen</strong> in Chrome to launch without browser bars.</p>
+    <button class="primary" id="dismissFullscreenHelp">Got it</button>
+  </div>
+</div>
 
 <script>
 (() => {
@@ -188,7 +244,7 @@ function renderCategories(){categoryGrid.innerHTML='';for(const d of decks){cons
 function showScreen(id){for(const screen of document.querySelectorAll('.screen'))screen.classList.remove('active');$(id).classList.add('active');window.scrollTo({top:0,behavior:'instant'});}
 function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function makePile(){const cards=[];const seen=new Set();for(const d of decks){if(!selected.has(d.id))continue;for(const word of d.words){const k=word.toLocaleLowerCase();if(seen.has(k))continue;seen.add(k);cards.push({word,category:d.name});}}return shuffle(cards);}
-function nextCard(){answering=false;if(!drawPile.length)drawPile=makePile();const card=drawPile.pop();if(!card){endRound();return;}const wordEl=$('currentWord');wordEl.textContent=card.word;wordEl.className='word'+(card.word.length>25?' verylong':card.word.length>15?' long':'');$('currentCategory').textContent=card.category;$('gameCard').classList.remove('correct','skip');}
+function nextCard(){answering=false;$('answerFeedback').textContent='';if(!drawPile.length)drawPile=makePile();const card=drawPile.pop();if(!card){endRound();return;}const wordEl=$('currentWord');wordEl.textContent=card.word;wordEl.className='word'+(card.word.length>25?' verylong':card.word.length>15?' long':'');$('currentCategory').textContent=card.category;$('gameCard').classList.remove('correct','skip');}
 function setToggle(name,value){const node=$(name);node.classList.toggle('on',value);node.setAttribute('aria-checked',String(value));}
 function toast(message){const el=$('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimeout);toastTimeout=setTimeout(()=>el.classList.remove('show'),3400);}
 function sound(type){if(!soundEnabled)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;soundCtx ||= new AC();if(soundCtx.state==='suspended')soundCtx.resume();const freq=type==='correct'?[540,780]:type==='skip'?[260,205]:[460,400,325];const now=soundCtx.currentTime;freq.forEach((f,i)=>{const osc=soundCtx.createOscillator(),g=soundCtx.createGain();osc.type='sine';osc.frequency.setValueAtTime(f,now+i*.11);g.gain.setValueAtTime(.055,now+i*.11);g.gain.exponentialRampToValueAtTime(.001,now+i*.11+.095);osc.connect(g).connect(soundCtx.destination);osc.start(now+i*.11);osc.stop(now+i*.11+.1);});}catch(e){}}
@@ -221,7 +277,7 @@ function sensorAngle(raw,kind){
   return (a===270||a===180)?-value:value;
 }
 function consumeTilt(raw,source){
-  if(!active||paused||!tiltEnabled)return;
+  if(!active||paused||!tiltEnabled||answering)return;
   const now=Date.now();
   if(source==='orientation'&&now-lastGravityAt<1000)return;
   const angle=sensorAngle(raw,source);
@@ -308,16 +364,53 @@ async function startRound(){
   }
   $('countdown').classList.add('active');$('countdownNumber').textContent='3';finishCountdown(id,3);
 }
-function answer(status){if(!active||paused||answering)return;updateTimer();if(!active)return;answering=true;const word=$('currentWord').textContent;history.push({word,correct:status==='correct'});if(status==='correct'){score++;$('scoreText').textContent=String(score);$('gameCard').classList.add('correct');sound('correct');vibrate(35);}else{skips++;$('gameCard').classList.add('skip');sound('skip');vibrate(20);}clearTimeout(flashTimeout);flashTimeout=setTimeout(()=>{if(active)nextCard();},110);}
+const FEEDBACK_MS=1000;
+function answer(status){
+  if(!active||paused||answering)return;
+  updateTimer();if(!active)return;
+  answering=true;
+  const correct=status==='correct';
+  const word=$('currentWord').textContent;
+  history.push({word,correct});
+  $('answerFeedback').textContent=correct?'✓ CORRECT':'↶ PASS';
+  if(correct){score++;$('scoreText').textContent=String(score);$('gameCard').classList.add('correct');sound('correct');vibrate(35);}
+  else{skips++;$('gameCard').classList.add('skip');sound('skip');vibrate(20);}
+  clearTimeout(flashTimeout);
+  flashTimeout=setTimeout(()=>{if(active&&!paused)nextCard();},FEEDBACK_MS);
+}
 function endRound(){if(!active)return;active=false;paused=false;clearInterval(ticker);clearTimeout(flashTimeout);clearTimeout(sensorWarningTimer);$('pauseCover').classList.remove('active');sound('end');vibrate([75,75,75]);$('finalScore').textContent=String(score);$('finalSkipped').textContent=String(skips);renderReview('correctReview',true);renderReview('skipReview',false);showScreen('results');}
 function renderReview(el,correct){const words=history.filter(h=>h.correct===correct);$(el).innerHTML=words.length?words.map(h=>`<span class="word-pill ${correct?'yes':'no'}"></span>`).join(''):'<span class="subtle">None this round</span>';if(words.length)Array.from($(el).children).forEach((node,i)=>{node.textContent=words[i].word;});}
-function pause(){if(!active)return;paused=true;remaining=Math.max(0,deadline-Date.now());$('pauseCover').classList.add('active');}
-function resume(){if(!active)return;deadline=Date.now()+remaining;paused=false;$('pauseCover').classList.remove('active');updateTimer();}
+function pause(){if(!active)return;paused=true;remaining=Math.max(0,deadline-Date.now());clearTimeout(flashTimeout);$('pauseCover').classList.add('active');}
+function resume(){if(!active)return;deadline=Date.now()+remaining;paused=false;$('pauseCover').classList.remove('active');if(answering)nextCard();updateTimer();}
 $('allBtn').addEventListener('click',()=>{selected=new Set(decks.map(d=>d.id));renderCategories()});$('clearBtn').addEventListener('click',()=>{selected.clear();renderCategories()});$('timeChoices').addEventListener('click',e=>{const chip=e.target.closest('[data-time]');if(!chip)return;roundSeconds=Number(chip.dataset.time);for(const c of $('timeChoices').children)c.classList.toggle('active',c===chip);});$('tiltSwitch').addEventListener('click',()=>{tiltEnabled=!tiltEnabled;setToggle('tiltSwitch',tiltEnabled)});$('reverseSwitch').addEventListener('click',()=>{reverseTilt=!reverseTilt;setToggle('reverseSwitch',reverseTilt)});$('soundSwitch').addEventListener('click',()=>{soundEnabled=!soundEnabled;setToggle('soundSwitch',soundEnabled)});
+function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}
+function updateFullscreenLabel(){
+  const full=!!(document.fullscreenElement||document.webkitFullscreenElement||isStandalone());
+  const b=$('fullscreenBtn');b.setAttribute('aria-pressed',String(full));b.title=full?'Exit fullscreen':'Fullscreen';b.setAttribute('aria-label',full?'Exit fullscreen':'Enter fullscreen');b.textContent=full?'⤢':'⛶';
+}
+async function toggleFullscreen(){
+  if(document.fullscreenElement||document.webkitFullscreenElement){
+    try{await (document.exitFullscreen?.()||document.webkitExitFullscreen?.());}catch(e){}
+    updateFullscreenLabel();return;
+  }
+  if(isStandalone()){toast('Already running as a fullscreen app.');return;}
+  try{
+    const fn=document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen;
+    if(!fn)throw Error('Fullscreen is unavailable');
+    await fn.call(document.documentElement);
+    updateFullscreenLabel();
+  }catch(e){$('fullscreenHelp').classList.add('active');}
+}
+$('fullscreenBtn').addEventListener('click',toggleFullscreen);
+$('dismissFullscreenHelp').addEventListener('click',()=>$('fullscreenHelp').classList.remove('active'));
+$('fullscreenHelp').addEventListener('click',e=>{if(e.target===$('fullscreenHelp'))$('fullscreenHelp').classList.remove('active');});
+document.addEventListener('fullscreenchange',updateFullscreenLabel);
+document.addEventListener('webkitfullscreenchange',updateFullscreenLabel);
 $('helpBtn').addEventListener('click',()=>{document.querySelector('.instructions').scrollIntoView({behavior:'smooth',block:'center'});});$('startBtn').addEventListener('click',startRound);$('correctBtn').addEventListener('click',()=>answer('correct'));$('skipBtn').addEventListener('click',()=>answer('skip'));$('pauseBtn').addEventListener('click',pause);$('resetTiltBtn').addEventListener('click',resetTilt);$('resumeBtn').addEventListener('click',resume);$('endBtn').addEventListener('click',endRound);$('againBtn').addEventListener('click',startRound);$('homeBtn').addEventListener('click',()=>{roundId++;active=false;clearInterval(ticker);showScreen('home')});
 let touchX=null,touchY=null;$('gameCard').addEventListener('touchstart',e=>{if(e.touches.length===1){touchX=e.touches[0].clientX;touchY=e.touches[0].clientY;}},{passive:true});$('gameCard').addEventListener('touchend',e=>{if(touchX===null)return;const dx=e.changedTouches[0].clientX-touchX;const dy=e.changedTouches[0].clientY-touchY;if(Math.abs(dx)>75&&Math.abs(dx)>Math.abs(dy)*1.5)answer(dx>0?'correct':'skip');touchX=null;touchY=null;},{passive:true});document.addEventListener('keydown',e=>{if(active&&!paused&&(e.key==='ArrowRight'||e.key===' ')){e.preventDefault();answer('correct');}else if(active&&!paused&&e.key==='ArrowLeft'){e.preventDefault();answer('skip');}else if(active&&(e.key==='Escape'||e.key==='p')){if(paused)resume();else pause();}});
 // Avoid accidental loss of results when a tab goes into the background; time still runs by clock.
 renderCategories();
+updateFullscreenLabel();
 })();
 </script>
 </body>
