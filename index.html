@@ -130,6 +130,14 @@ header{display:flex;align-items:center;justify-content:space-between;gap:18px}
 @media(max-width:560px){.app{padding:23px 17px 132px}.hero{margin:43px 0 29px}.hero h1{font-size:clamp(39px,9.7vw,51px)}.panel{padding:18px 15px}.category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.cat{padding:13px 10px;min-height:88px}.cat-emoji{font-size:19px}.cat-title{font-size:12px}.iconbtn{font-size:11px}.setting{align-items:flex-start;flex-direction:column}.start-area{padding-left:17px;padding-right:17px}.game-card{margin:19px 0 13px}.word{font-size:clamp(40px,11vw,64px)}.action-btn{min-height:76px}.result-buttons{grid-template-columns:1fr}}
 @media(max-width:355px){.cat-emoji{display:none}.cat{padding:12px}.timechips{gap:5px}.chip{padding:8px 11px}.game-card{padding:25px 12px}.action-btn{font-size:14px}}
 @media(orientation:landscape) and (max-height:520px){.play-screen{padding-top:9px}.game-card{margin:10px 0;min-height:110px}.card-category{margin-bottom:8px}.hint{display:none}.action-btn{min-height:53px}.game-note{display:none}.word{font-size:clamp(35px,7vw,65px)}}
+.tilt-feature{margin-top:16px;padding:15px 0 2px;border-top:1px solid var(--line)}
+.tilt-feature .toggle-info strong{font-size:14px}
+.tilt-feature .toggle-info small{line-height:1.5}
+.motion-status{margin:13px 0 0;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;min-height:30px;text-align:center;font-size:12px;color:var(--muted)}
+.motion-status[hidden]{display:none}
+.motion-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#a9b2a9;margin-right:5px;vertical-align:middle}
+.motion-dot.ready{background:#3fa87b}
+.motion-reset{font-size:11px;font-weight:800;background:#e7f1ec;color:var(--accent);padding:7px 9px;border-radius:8px}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
 </style>
 </head>
@@ -138,13 +146,13 @@ header{display:flex;align-items:center;justify-content:space-between;gap:18px}
   <header><div class="brand"><div class="brandmark">B!</div><div><strong>Bol Bhai!</strong><small>Party word game</small></div></div><button class="iconbtn" id="helpBtn" aria-label="Jump to how to play">How to play ?</button></header>
   <section class="hero"><span class="eyebrow">Your next game night</span><h1>Simple words.<br><em>Big laughs.</em></h1><p>Hold up your phone, get your friends to describe the word, and guess before time runs out. Everyday English meets Bollywood and India.</p></section>
   <section class="panel"><div class="sectionhead"><h2>Choose categories</h2><div class="tiny-actions"><button class="textbtn" id="allBtn">Select all</button><button class="textbtn" id="clearBtn">Clear</button></div></div><div class="category-grid" id="categories"></div><p id="selectionCount" class="subtle" aria-live="polite"></p></section>
-  <section class="panel"><div class="sectionhead"><h2>Round settings</h2></div><div class="setting"><span class="settinglabel">Time per round</span><div class="timechips" id="timeChoices"><button class="chip" data-time="30">30s</button><button class="chip active" data-time="60">60s</button><button class="chip" data-time="90">90s</button><button class="chip" data-time="120">2m</button></div></div><details class="more-settings"><summary>More options</summary><div class="toggle-row"><div class="toggle-info"><strong>Phone tilt controls</strong><small>Optional. Tilt to guess or pass on supported devices.</small></div><button id="tiltSwitch" role="switch" aria-checked="false" class="switch" aria-label="Enable tilt controls"><span></span></button></div><div class="toggle-row"><div class="toggle-info"><strong>Sound effects</strong><small>Play short sounds for correct guesses and passes.</small></div><button id="soundSwitch" role="switch" aria-checked="true" class="switch on" aria-label="Enable sound effects"><span></span></button></div></details></section>
-  <div class="instructions"><strong>How to play:</strong> One person holds the phone with the screen facing the group. Everyone else gives clues without saying the word. Tap <strong>Correct</strong> or <strong>Pass</strong> to move on.</div>
+  <section class="panel"><div class="sectionhead"><h2>Round settings</h2></div><div class="setting"><span class="settinglabel">Time per round</span><div class="timechips" id="timeChoices"><button class="chip" data-time="30">30s</button><button class="chip active" data-time="60">60s</button><button class="chip" data-time="90">90s</button><button class="chip" data-time="120">2m</button></div></div><div class="toggle-row tilt-feature"><div class="toggle-info"><strong>Heads Up tilt controls</strong><small>On by default. Hold the phone against your forehead. Tilt the screen down for Correct, up for Pass. iPhone may ask for permission when you start.</small></div><button id="tiltSwitch" role="switch" aria-checked="true" class="switch on" aria-label="Enable tilt controls"><span></span></button></div><details class="more-settings"><summary>More options</summary><div class="toggle-row"><div class="toggle-info"><strong>Reverse tilt direction</strong><small>Switch this on if down and up register backwards on your phone.</small></div><button id="reverseSwitch" role="switch" aria-checked="false" class="switch" aria-label="Reverse tilt direction"><span></span></button></div><div class="toggle-row"><div class="toggle-info"><strong>Sound effects</strong><small>Play short sounds for correct guesses and passes.</small></div><button id="soundSwitch" role="switch" aria-checked="true" class="switch on" aria-label="Enable sound effects"><span></span></button></div></details></section>
+  <div class="instructions"><strong>How to play:</strong> Hold your phone sideways against your forehead, screen facing your friends. They give you clues. Tilt the screen <strong>down for Correct</strong> or <strong>up to Pass</strong>, then return to the middle. You can still tap the buttons or swipe.</div>
   <div class="start-area"><div class="start-inner"><button class="primary" id="startBtn">Start playing <span aria-hidden="true">→</span></button><p class="start-foot">No sign-up · Free to play · Works offline</p></div></div>
 </main>
-<section id="game" class="play-screen screen" aria-label="Playing round"><div class="game-top"><div class="game-stat"><small>Time left</small><strong id="timerText">1:00</strong></div><button id="pauseBtn" aria-label="Pause round">Ⅱ</button><div class="game-stat right-stat"><small>Score</small><strong id="scoreText">0</strong></div></div><div class="timebar"><div id="timeBar"></div></div><div class="game-card" id="gameCard"><span class="card-category" id="currentCategory">Everyday English</span><div class="word" id="currentWord">Ready?</div><div class="hint">← Swipe left to pass · Swipe right for correct →</div></div><div class="game-controls"><button class="action-btn skip-btn" id="skipBtn">↶ Pass</button><button class="action-btn correct-btn" id="correctBtn">✓ Correct</button></div><p class="game-note">You can also use the left / right arrow keys</p></section>
+<section id="game" class="play-screen screen" aria-label="Playing round"><div class="game-top"><div class="game-stat"><small>Time left</small><strong id="timerText">1:00</strong></div><button id="pauseBtn" aria-label="Pause round">Ⅱ</button><div class="game-stat right-stat"><small>Score</small><strong id="scoreText">0</strong></div></div><div class="timebar"><div id="timeBar"></div></div><div class="game-card" id="gameCard"><span class="card-category" id="currentCategory">Everyday English</span><div class="word" id="currentWord">Ready?</div><div class="hint">Tilt screen down ✓ · Tilt up to pass ↶</div></div><div class="game-controls"><button class="action-btn skip-btn" id="skipBtn">↶ Pass</button><button class="action-btn correct-btn" id="correctBtn">✓ Correct</button></div><div id="tiltStatus" class="motion-status" role="status" aria-live="polite"><span><span class="motion-dot" id="tiltDot"></span><span id="tiltStatusText">Preparing motion sensor…</span></span><button id="resetTiltBtn" type="button" class="motion-reset">Recalibrate</button></div></section>
 <section id="results" class="result screen"><div class="result-top"><div class="trophy">★</div><h1>Round complete.</h1><p>Nice playing! Here's how you did.</p></div><div class="score-display"><div class="score-box won"><strong id="finalScore">0</strong><small>Correct</small></div><div class="score-box missed"><strong id="finalSkipped">0</strong><small>Passed</small></div></div><div class="review"><h2>Words you guessed</h2><div class="word-list" id="correctReview"></div></div><div class="review"><h2>Words you passed</h2><div class="word-list" id="skipReview"></div></div><div class="result-buttons"><button class="secondary" id="homeBtn">Change categories</button><button class="primary" id="againBtn">Play again →</button></div></section>
-<div class="countdown" id="countdown"><div class="num" id="countdownNumber">3</div><h2>Get ready</h2><p>Hold the phone up so your friends can see the word.</p></div>
+<div class="countdown" id="countdown"><div class="num" id="countdownNumber">3</div><h2>Get ready</h2><p>Put the phone on your forehead with its screen facing your friends. Keep it steady when the first word appears.</p></div>
 <div class="pause-cover" id="pauseCover"><div class="pause-box"><div style="font-size:38px">Ⅱ</div><h2>Paused</h2><p>Take a break. Your timer is stopped.</p><button class="primary" id="resumeBtn">Resume round →</button><button class="textbtn" id="endBtn">End round early</button></div></div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -167,8 +175,12 @@ const decks = [
 for(const deck of decks){deck.words=[...new Set(deck.words.split('|').map(s=>s.trim()).filter(Boolean))];}
 const $=id=>document.getElementById(id);
 let selected=new Set(['everyday','food','movies']);
-let roundSeconds=60,tiltEnabled=false,soundEnabled=true;
-let drawPile=[],history=[],score=0,skips=0,active=false,paused=false,answering=false,deadline=0,remaining=60000,ticker=null,roundId=0,tiltBase=null,tiltReady=false,tiltCooldown=0,motionListenerAdded=false;
+let roundSeconds=60,tiltEnabled=true,reverseTilt=false,soundEnabled=true;
+let drawPile=[],history=[],score=0,skips=0,active=false,paused=false,answering=false,deadline=0,remaining=60000,ticker=null,roundId=0;
+// Gravity along the screen's Z axis works in BOTH landscape and portrait.
+// Orientation beta/gamma is used only on devices without accelerometer events.
+let tiltBase=null,tiltFiltered=null,tiltSamples=[],tiltReady=false,tiltCooldown=0;
+let motionListenerAdded=false,lastGravityAt=0,lastSensorAt=0,tiltStatusValue='',sensorWarningTimer=null;
 let soundCtx=null,toastTimeout=null,flashTimeout=null,countdownTimeout=null;
 const categoryGrid=$('categories');
 const deckById=Object.fromEntries(decks.map(d=>[d.id,d]));
@@ -182,21 +194,127 @@ function toast(message){const el=$('toast');el.textContent=message;el.classList.
 function sound(type){if(!soundEnabled)return;try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;soundCtx ||= new AC();if(soundCtx.state==='suspended')soundCtx.resume();const freq=type==='correct'?[540,780]:type==='skip'?[260,205]:[460,400,325];const now=soundCtx.currentTime;freq.forEach((f,i)=>{const osc=soundCtx.createOscillator(),g=soundCtx.createGain();osc.type='sine';osc.frequency.setValueAtTime(f,now+i*.11);g.gain.setValueAtTime(.055,now+i*.11);g.gain.exponentialRampToValueAtTime(.001,now+i*.11+.095);osc.connect(g).connect(soundCtx.destination);osc.start(now+i*.11);osc.stop(now+i*.11+.1);});}catch(e){}}
 function vibrate(pattern){try{navigator.vibrate?.(pattern);}catch(e){}}
 function updateTimer(){if(!active||paused)return;remaining=Math.max(0,deadline-Date.now());const sec=Math.ceil(remaining/1000);$('timerText').textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;$('timeBar').style.width=`${100*remaining/(roundSeconds*1000)}%`;if(remaining<=0)endRound();}
-function finishCountdown(id,n){if(id!==roundId)return;if(n>0){$('countdownNumber').textContent=n;countdownTimeout=setTimeout(()=>finishCountdown(id,n-1),950);return;}$('countdown').classList.remove('active');showScreen('game');history=[];score=0;skips=0;$('scoreText').textContent='0';drawPile=makePile();active=true;paused=false;remaining=roundSeconds*1000;deadline=Date.now()+remaining;tiltBase=null;tiltReady=false;nextCard();updateTimer();clearInterval(ticker);ticker=setInterval(updateTimer,90);}
-async function startRound(){if(selected.size===0)return;roundId++;const id=roundId;clearTimeout(countdownTimeout);clearInterval(ticker);active=false;paused=false;const wantsMotion=tiltEnabled;
-// iOS requests motion access only as a result of a user gesture.
-if(wantsMotion){if(typeof DeviceOrientationEvent==='undefined'){toast('Tilt is not supported here. Tap the buttons instead.');tiltEnabled=false;setToggle('tiltSwitch',false);}else if(typeof DeviceOrientationEvent.requestPermission==='function'){try{const p=await DeviceOrientationEvent.requestPermission();if(p!=='granted'){tiltEnabled=false;setToggle('tiltSwitch',false);toast('Motion access unavailable. Buttons will work!');}}catch(e){tiltEnabled=false;setToggle('tiltSwitch',false);toast('Motion access unavailable. Buttons will work!');}}}
-if(id!==roundId)return;
-if(tiltEnabled&&!motionListenerAdded){window.addEventListener('deviceorientation',onOrientation);motionListenerAdded=true;}
-$('countdown').classList.add('active');$('countdownNumber').textContent='3';finishCountdown(id,3);}
+function setMotionStatus(message,ready=false){
+  if(message===tiltStatusValue)return;
+  tiltStatusValue=message;
+  $('tiltStatusText').textContent=message;
+  $('tiltDot').classList.toggle('ready',ready);
+}
+function resetTilt(){
+  tiltBase=null;tiltFiltered=null;tiltSamples=[];tiltReady=false;tiltCooldown=0;
+  if(tiltEnabled)setMotionStatus('Hold the phone steady to calibrate…');
+}
+function sensorAngle(raw,kind){
+  if(kind==='motion'){
+    const {x,y,z}=raw;
+    if(![x,y,z].every(Number.isFinite))return null;
+    // With the phone upright, gravity lies in the screen plane. When the
+    // screen is tilted down, the Z acceleration becomes negative.
+    return Math.atan2(-z,Math.hypot(x,y))*180/Math.PI;
+  }
+  let a=screen.orientation?.angle;
+  if(!Number.isFinite(a))a=typeof window.orientation==='number'?window.orientation:0;
+  a=((a%360)+360)%360;
+  const landscape=a===90||a===270;
+  const value=landscape?raw.gamma:raw.beta;
+  if(!Number.isFinite(value))return null;
+  return (a===270||a===180)?-value:value;
+}
+function consumeTilt(raw,source){
+  if(!active||paused||!tiltEnabled)return;
+  const now=Date.now();
+  if(source==='orientation'&&now-lastGravityAt<1000)return;
+  const angle=sensorAngle(raw,source);
+  if(angle===null)return;
+  if(source==='motion')lastGravityAt=now;
+  lastSensorAt=now;
+  tiltFiltered=tiltFiltered===null?angle:tiltFiltered*.64+angle*.36;
+  if(tiltBase===null){
+    // Wait for a few readings with the phone in the forehead position.
+    tiltSamples.push(tiltFiltered);
+    if(tiltSamples.length<8)return;
+    const recent=tiltSamples.slice(-6);
+    tiltBase=recent.reduce((a,b)=>a+b,0)/recent.length;
+    tiltReady=true;
+    setMotionStatus('Tilt down ✓ · Tilt up ↶',true);
+    return;
+  }
+  const diff=(tiltFiltered-tiltBase)*(reverseTilt?-1:1);
+  if(!tiltReady){
+    if(Math.abs(diff)<11&&now-tiltCooldown>450){
+      tiltReady=true;
+      setMotionStatus('Tilt down ✓ · Tilt up ↶',true);
+    }
+    return;
+  }
+  if(now-tiltCooldown<550)return;
+  if(diff>28||diff<-28){
+    tiltReady=false;
+    tiltCooldown=now;
+    setMotionStatus('Return the phone to the middle…');
+    answer(diff>0?'correct':'skip');
+  }
+}
+function onMotion(e){if(e.accelerationIncludingGravity)consumeTilt(e.accelerationIncludingGravity,'motion');}
+function onOrientation(e){consumeTilt(e,'orientation');}
+function finishCountdown(id,n){
+  if(id!==roundId)return;
+  if(n>0){$('countdownNumber').textContent=n;countdownTimeout=setTimeout(()=>finishCountdown(id,n-1),950);return;}
+  $('countdown').classList.remove('active');showScreen('game');
+  history=[];score=0;skips=0;$('scoreText').textContent='0';drawPile=makePile();
+  active=true;paused=false;remaining=roundSeconds*1000;deadline=Date.now()+remaining;
+  lastGravityAt=0;lastSensorAt=0;resetTilt();
+  $('tiltStatus').hidden=!tiltEnabled;
+  if(tiltEnabled){
+    sensorWarningTimer=setTimeout(()=>{if(active&&tiltEnabled&&!lastSensorAt)setMotionStatus('No sensor data. Allow motion access or use buttons.');},2300);
+  }
+  nextCard();updateTimer();clearInterval(ticker);ticker=setInterval(updateTimer,90);
+}
+async function startRound(){
+  if(selected.size===0)return;
+  roundId++;const id=roundId;
+  clearTimeout(countdownTimeout);clearTimeout(sensorWarningTimer);clearInterval(ticker);
+  active=false;paused=false;
+  if(tiltEnabled){
+    const hasMotion=typeof window.DeviceMotionEvent!=='undefined';
+    const hasOrientation=typeof window.DeviceOrientationEvent!=='undefined';
+    if(!window.isSecureContext||(!hasMotion&&!hasOrientation)){
+      tiltEnabled=false;setToggle('tiltSwitch',false);
+      toast('This browser cannot use motion sensors. Buttons still work.');
+    }else{
+      // Fire BOTH permission requests synchronously in the Start button click.
+      // Awaiting one before requesting the other loses iOS user activation.
+      const requests=[];
+      if(hasMotion&&typeof DeviceMotionEvent.requestPermission==='function'){
+        try{requests.push(DeviceMotionEvent.requestPermission());}catch(e){requests.push(Promise.reject(e));}
+      }
+      if(hasOrientation&&typeof DeviceOrientationEvent.requestPermission==='function'){
+        try{requests.push(DeviceOrientationEvent.requestPermission());}catch(e){requests.push(Promise.reject(e));}
+      }
+      if(requests.length){
+        const outcomes=await Promise.allSettled(requests);
+        if(!outcomes.some(x=>x.status==='fulfilled'&&x.value==='granted')){
+          tiltEnabled=false;setToggle('tiltSwitch',false);
+          toast('Motion permission denied. You can still tap or swipe.');
+        }
+      }
+    }
+  }
+  if(id!==roundId)return;
+  if(tiltEnabled&&!motionListenerAdded){
+    window.addEventListener('devicemotion',onMotion,{passive:true});
+    window.addEventListener('deviceorientation',onOrientation,{passive:true});
+    motionListenerAdded=true;
+  }
+  $('countdown').classList.add('active');$('countdownNumber').textContent='3';finishCountdown(id,3);
+}
 function answer(status){if(!active||paused||answering)return;updateTimer();if(!active)return;answering=true;const word=$('currentWord').textContent;history.push({word,correct:status==='correct'});if(status==='correct'){score++;$('scoreText').textContent=String(score);$('gameCard').classList.add('correct');sound('correct');vibrate(35);}else{skips++;$('gameCard').classList.add('skip');sound('skip');vibrate(20);}clearTimeout(flashTimeout);flashTimeout=setTimeout(()=>{if(active)nextCard();},110);}
-function endRound(){if(!active)return;active=false;paused=false;clearInterval(ticker);clearTimeout(flashTimeout);$('pauseCover').classList.remove('active');sound('end');vibrate([75,75,75]);$('finalScore').textContent=String(score);$('finalSkipped').textContent=String(skips);renderReview('correctReview',true);renderReview('skipReview',false);showScreen('results');}
+function endRound(){if(!active)return;active=false;paused=false;clearInterval(ticker);clearTimeout(flashTimeout);clearTimeout(sensorWarningTimer);$('pauseCover').classList.remove('active');sound('end');vibrate([75,75,75]);$('finalScore').textContent=String(score);$('finalSkipped').textContent=String(skips);renderReview('correctReview',true);renderReview('skipReview',false);showScreen('results');}
 function renderReview(el,correct){const words=history.filter(h=>h.correct===correct);$(el).innerHTML=words.length?words.map(h=>`<span class="word-pill ${correct?'yes':'no'}"></span>`).join(''):'<span class="subtle">None this round</span>';if(words.length)Array.from($(el).children).forEach((node,i)=>{node.textContent=words[i].word;});}
 function pause(){if(!active)return;paused=true;remaining=Math.max(0,deadline-Date.now());$('pauseCover').classList.add('active');}
 function resume(){if(!active)return;deadline=Date.now()+remaining;paused=false;$('pauseCover').classList.remove('active');updateTimer();}
-function onOrientation(e){if(!active||paused||!tiltEnabled||!Number.isFinite(e.beta))return;const beta=e.beta;if(tiltBase===null){tiltBase=beta;return;}const diff=((beta-tiltBase+540)%360)-180;if(Math.abs(diff)<12)tiltReady=true;if(!tiltReady||Date.now()-tiltCooldown<600)return;if(diff>27){tiltReady=false;tiltCooldown=Date.now();answer('correct');}else if(diff<-27){tiltReady=false;tiltCooldown=Date.now();answer('skip');}}
-$('allBtn').addEventListener('click',()=>{selected=new Set(decks.map(d=>d.id));renderCategories()});$('clearBtn').addEventListener('click',()=>{selected.clear();renderCategories()});$('timeChoices').addEventListener('click',e=>{const chip=e.target.closest('[data-time]');if(!chip)return;roundSeconds=Number(chip.dataset.time);for(const c of $('timeChoices').children)c.classList.toggle('active',c===chip);});$('tiltSwitch').addEventListener('click',()=>{tiltEnabled=!tiltEnabled;setToggle('tiltSwitch',tiltEnabled)});$('soundSwitch').addEventListener('click',()=>{soundEnabled=!soundEnabled;setToggle('soundSwitch',soundEnabled)});
-$('helpBtn').addEventListener('click',()=>{document.querySelector('.instructions').scrollIntoView({behavior:'smooth',block:'center'});});$('startBtn').addEventListener('click',startRound);$('correctBtn').addEventListener('click',()=>answer('correct'));$('skipBtn').addEventListener('click',()=>answer('skip'));$('pauseBtn').addEventListener('click',pause);$('resumeBtn').addEventListener('click',resume);$('endBtn').addEventListener('click',endRound);$('againBtn').addEventListener('click',startRound);$('homeBtn').addEventListener('click',()=>{roundId++;active=false;clearInterval(ticker);showScreen('home')});
+$('allBtn').addEventListener('click',()=>{selected=new Set(decks.map(d=>d.id));renderCategories()});$('clearBtn').addEventListener('click',()=>{selected.clear();renderCategories()});$('timeChoices').addEventListener('click',e=>{const chip=e.target.closest('[data-time]');if(!chip)return;roundSeconds=Number(chip.dataset.time);for(const c of $('timeChoices').children)c.classList.toggle('active',c===chip);});$('tiltSwitch').addEventListener('click',()=>{tiltEnabled=!tiltEnabled;setToggle('tiltSwitch',tiltEnabled)});$('reverseSwitch').addEventListener('click',()=>{reverseTilt=!reverseTilt;setToggle('reverseSwitch',reverseTilt)});$('soundSwitch').addEventListener('click',()=>{soundEnabled=!soundEnabled;setToggle('soundSwitch',soundEnabled)});
+$('helpBtn').addEventListener('click',()=>{document.querySelector('.instructions').scrollIntoView({behavior:'smooth',block:'center'});});$('startBtn').addEventListener('click',startRound);$('correctBtn').addEventListener('click',()=>answer('correct'));$('skipBtn').addEventListener('click',()=>answer('skip'));$('pauseBtn').addEventListener('click',pause);$('resetTiltBtn').addEventListener('click',resetTilt);$('resumeBtn').addEventListener('click',resume);$('endBtn').addEventListener('click',endRound);$('againBtn').addEventListener('click',startRound);$('homeBtn').addEventListener('click',()=>{roundId++;active=false;clearInterval(ticker);showScreen('home')});
 let touchX=null,touchY=null;$('gameCard').addEventListener('touchstart',e=>{if(e.touches.length===1){touchX=e.touches[0].clientX;touchY=e.touches[0].clientY;}},{passive:true});$('gameCard').addEventListener('touchend',e=>{if(touchX===null)return;const dx=e.changedTouches[0].clientX-touchX;const dy=e.changedTouches[0].clientY-touchY;if(Math.abs(dx)>75&&Math.abs(dx)>Math.abs(dy)*1.5)answer(dx>0?'correct':'skip');touchX=null;touchY=null;},{passive:true});document.addEventListener('keydown',e=>{if(active&&!paused&&(e.key==='ArrowRight'||e.key===' ')){e.preventDefault();answer('correct');}else if(active&&!paused&&e.key==='ArrowLeft'){e.preventDefault();answer('skip');}else if(active&&(e.key==='Escape'||e.key==='p')){if(paused)resume();else pause();}});
 // Avoid accidental loss of results when a tab goes into the background; time still runs by clock.
 renderCategories();
