@@ -10,6 +10,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <meta name="description" content="Bol Bhai! A free, offline Heads Up-style party game with easy English words, Bollywood movies and Indian favourites.">
 <title>Bol Bhai! — The Indian party guessing game</title>
 <style>
@@ -144,7 +145,17 @@ header{display:flex;align-items:center;justify-content:space-between;gap:18px}
 .fullscreen-help-content{background:var(--paper);color:var(--ink);border-radius:20px;padding:26px;max-width:390px;width:100%;box-shadow:0 25px 80px #0003}
 .fullscreen-help-content h2{font-size:25px;margin:0 0 12px;letter-spacing:-.6px}
 .fullscreen-help-content p{font-size:14px;color:var(--muted);line-height:1.6}
-.fullscreen-help-content .primary{margin-top:20px}
+.fullscreen-help-content .primary{margin-top:18px}
+.fullscreen-help-content{max-height:calc(100svh - 24px);overflow-y:auto;overscroll-behavior:contain}
+.fullscreen-help-content ol{padding-left:21px;margin:13px 0;line-height:1.65;font-size:14px}
+.fullscreen-help-content li{padding-left:3px;margin-bottom:7px}
+.fullscreen-help-content .install-note{font-size:12px;margin:12px 0 0}
+.ios-install-promo{display:flex;align-items:center;justify-content:space-between;gap:14px;border:1px solid #b6d3bf;border-radius:14px;background:#eef6f0;padding:14px 15px;margin:22px 0 0}
+.ios-install-promo[hidden]{display:none}
+.ios-install-promo strong{display:block;font-size:13px;letter-spacing:-.2px}
+.ios-install-promo p{font-size:12px;line-height:1.45;margin:4px 0 0;color:var(--muted)}
+.ios-install-promo button{white-space:nowrap;padding:10px 13px;background:var(--accent);border-radius:10px;color:white;font-weight:800;font-size:12px}
+@media(max-width:410px){.ios-install-promo{align-items:flex-start;flex-direction:column}.ios-install-promo button{width:100%}}
 @media(orientation:landscape) and (max-height:640px){
   .play-screen.active{display:grid;grid-template-columns:clamp(78px,14vw,128px) minmax(0,1fr) clamp(78px,14vw,128px);grid-template-rows:auto 5px minmax(0,1fr) auto;column-gap:clamp(8px,1.3vw,17px);row-gap:clamp(5px,1.5vh,11px);height:100svh;min-height:0;max-width:none;overflow:hidden;padding:max(7px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(7px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
   .game-top{grid-column:1/-1;grid-row:1;min-height:36px;gap:9px}
@@ -193,6 +204,7 @@ header{display:flex;align-items:center;justify-content:space-between;gap:18px}
 <main id="home" class="app screen active">
   <header><div class="brand"><div class="brandmark">B!</div><div><strong>Bol Bhai!</strong><small>Party word game</small></div></div><button class="iconbtn" id="helpBtn" aria-label="Jump to how to play">How to play ?</button></header>
   <section class="hero"><span class="eyebrow">Your next game night</span><h1>Simple words.<br><em>Big laughs.</em></h1><p>Hold up your phone, get your friends to describe the word, and guess before time runs out. Everyday English meets Bollywood and India.</p></section>
+  <aside class="ios-install-promo" id="iosInstallPromo" hidden><div><strong>Play without Safari bars</strong><p>Add Bol Bhai! to your iPhone Home Screen for an app-like landscape experience.</p></div><button type="button" id="installHelpBtn">How to install</button></aside>
   <section class="panel"><div class="sectionhead"><h2>Choose categories</h2><div class="tiny-actions"><button class="textbtn" id="allBtn">Select all</button><button class="textbtn" id="clearBtn">Clear</button></div></div><div class="category-grid" id="categories"></div><p id="selectionCount" class="subtle" aria-live="polite"></p></section>
   <section class="panel"><div class="sectionhead"><h2>Round settings</h2></div><div class="setting"><span class="settinglabel">Time per round</span><div class="timechips" id="timeChoices"><button class="chip" data-time="30">30s</button><button class="chip active" data-time="60">60s</button><button class="chip" data-time="90">90s</button><button class="chip" data-time="120">2m</button></div></div><div class="toggle-row tilt-feature"><div class="toggle-info"><strong>Heads Up tilt controls</strong><small>On by default. Hold the phone against your forehead. Tilt the screen down for Correct, up for Pass. iPhone may ask for permission when you start.</small></div><button id="tiltSwitch" role="switch" aria-checked="true" class="switch on" aria-label="Enable tilt controls"><span></span></button></div><details class="more-settings"><summary>More options</summary><div class="toggle-row"><div class="toggle-info"><strong>Reverse tilt direction</strong><small>Switch this on if down and up register backwards on your phone.</small></div><button id="reverseSwitch" role="switch" aria-checked="false" class="switch" aria-label="Reverse tilt direction"><span></span></button></div><div class="toggle-row"><div class="toggle-info"><strong>Sound effects</strong><small>Play short sounds for correct guesses and passes.</small></div><button id="soundSwitch" role="switch" aria-checked="true" class="switch on" aria-label="Enable sound effects"><span></span></button></div></details></section>
   <div class="instructions"><strong>How to play:</strong> Rotate to landscape and hold your phone against your forehead, screen facing your friends. They give you clues. Tilt the screen <strong>down for Correct</strong> or <strong>up to Pass</strong>, then return to the middle. You can still tap the buttons or swipe.</div>
@@ -206,8 +218,9 @@ header{display:flex;align-items:center;justify-content:space-between;gap:18px}
 <div class="fullscreen-help" id="fullscreenHelp" role="dialog" aria-modal="true" aria-labelledby="fullscreenHelpTitle">
   <div class="fullscreen-help-content">
     <h2 id="fullscreenHelpTitle">Play without browser bars</h2>
-    <p><strong>On iPhone:</strong> Safari doesn't support fullscreen for regular websites. Tap the Share button, choose <strong>Add to Home Screen</strong>, then open Bol Bhai! from your Home Screen to play like an app.</p>
-    <p><strong>On Android:</strong> Tap the fullscreen icon again, or choose <strong>Add to Home screen</strong> in Chrome to launch without browser bars.</p>
+    <p id="fullscreenHelpIntro">For a more immersive experience, open Bol Bhai! as a Home Screen app.</p>
+    <ol id="fullscreenHelpSteps"><li>Open the site in Safari.</li><li>Tap Share, then Add to Home Screen.</li><li>Turn on Open as Web App and tap Add.</li></ol>
+    <p id="fullscreenHelpNote" class="install-note">Launch the new Home Screen icon to hide Safari's toolbar.</p>
     <button class="primary" id="dismissFullscreenHelp">Got it</button>
   </div>
 </div>
@@ -384,26 +397,60 @@ function pause(){if(!active)return;paused=true;remaining=Math.max(0,deadline-Dat
 function resume(){if(!active)return;deadline=Date.now()+remaining;paused=false;$('pauseCover').classList.remove('active');if(answering)nextCard();updateTimer();}
 $('allBtn').addEventListener('click',()=>{selected=new Set(decks.map(d=>d.id));renderCategories()});$('clearBtn').addEventListener('click',()=>{selected.clear();renderCategories()});$('timeChoices').addEventListener('click',e=>{const chip=e.target.closest('[data-time]');if(!chip)return;roundSeconds=Number(chip.dataset.time);for(const c of $('timeChoices').children)c.classList.toggle('active',c===chip);});$('tiltSwitch').addEventListener('click',()=>{tiltEnabled=!tiltEnabled;setToggle('tiltSwitch',tiltEnabled)});$('reverseSwitch').addEventListener('click',()=>{reverseTilt=!reverseTilt;setToggle('reverseSwitch',reverseTilt)});$('soundSwitch').addEventListener('click',()=>{soundEnabled=!soundEnabled;setToggle('soundSwitch',soundEnabled)});
 function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}
+const isIOSPhone=/iPhone|iPod/i.test(navigator.userAgent);
+let helpPausedRound=false;
 function updateFullscreenLabel(){
-  const full=!!(document.fullscreenElement||document.webkitFullscreenElement||isStandalone());
-  const b=$('fullscreenBtn');b.setAttribute('aria-pressed',String(full));b.title=full?'Exit fullscreen':'Fullscreen';b.setAttribute('aria-label',full?'Exit fullscreen':'Enter fullscreen');b.textContent=full?'⤢':'⛶';
+  const full=!!(document.fullscreenElement||document.webkitFullscreenElement);
+  const installed=isStandalone();
+  const b=$('fullscreenBtn');
+  // Safari on iPhone has no element fullscreen; use this as an install guide instead.
+  b.hidden=installed;
+  $('iosInstallPromo').hidden=!(isIOSPhone&&!installed);
+  b.setAttribute('aria-pressed',String(full));
+  b.title=isIOSPhone?'Play without Safari bars':full?'Exit fullscreen':'Fullscreen';
+  b.setAttribute('aria-label',isIOSPhone?'Install for app view':full?'Exit fullscreen':'Enter fullscreen');
+  b.textContent=isIOSPhone?'▣':full?'⤢':'⛶';
+}
+function openFullscreenHelp(){
+  helpPausedRound=active&&!paused;
+  if(helpPausedRound)pause();
+  if(isIOSPhone){
+    $('fullscreenHelpTitle').textContent='iPhone app view';
+    $('fullscreenHelpIntro').textContent='iPhone Safari cannot switch an ordinary webpage to true fullscreen. Add Bol Bhai! to your Home Screen for a cleaner, app-like view.';
+    $('fullscreenHelpSteps').innerHTML='<li>Open this page in <strong>Safari</strong> (not inside another app).</li><li>Tap <strong>Share</strong> (the square with an arrow), then <strong>Add to Home Screen</strong>.</li><li>Turn on <strong>Open as Web App</strong>, then tap <strong>Add</strong>.</li><li>Open the new <strong>Bol Bhai!</strong> icon and rotate your iPhone sideways.</li>';
+    $('fullscreenHelpNote').textContent='Safari’s address bar and bottom toolbar will be hidden. The iPhone status bar may remain visible.';
+  }else{
+    $('fullscreenHelpTitle').textContent='Fullscreen not available';
+    $('fullscreenHelpIntro').textContent='This browser does not support immersive fullscreen for this page. You can still install Bol Bhai! as a web app.';
+    $('fullscreenHelpSteps').innerHTML='<li>Open the website in your main browser.</li><li>Use the browser menu to choose <strong>Add to Home Screen</strong> or <strong>Install app</strong>.</li><li>Launch Bol Bhai! from the new icon.</li>';
+    $('fullscreenHelpNote').textContent='The browser may still display some system controls.';
+  }
+  $('fullscreenHelp').classList.add('active');
+  $('dismissFullscreenHelp').focus();
+}
+function closeFullscreenHelp(){
+  $('fullscreenHelp').classList.remove('active');
+  if(helpPausedRound&&active&&paused)resume();
+  helpPausedRound=false;
 }
 async function toggleFullscreen(){
+  if(isIOSPhone){openFullscreenHelp();return;}
   if(document.fullscreenElement||document.webkitFullscreenElement){
     try{await (document.exitFullscreen?.()||document.webkitExitFullscreen?.());}catch(e){}
     updateFullscreenLabel();return;
   }
-  if(isStandalone()){toast('Already running as a fullscreen app.');return;}
+  if(isStandalone()){toast('Already running as an app.');return;}
   try{
     const fn=document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen;
     if(!fn)throw Error('Fullscreen is unavailable');
     await fn.call(document.documentElement);
     updateFullscreenLabel();
-  }catch(e){$('fullscreenHelp').classList.add('active');}
+  }catch(e){openFullscreenHelp();}
 }
 $('fullscreenBtn').addEventListener('click',toggleFullscreen);
-$('dismissFullscreenHelp').addEventListener('click',()=>$('fullscreenHelp').classList.remove('active'));
-$('fullscreenHelp').addEventListener('click',e=>{if(e.target===$('fullscreenHelp'))$('fullscreenHelp').classList.remove('active');});
+$('installHelpBtn').addEventListener('click',openFullscreenHelp);
+$('dismissFullscreenHelp').addEventListener('click',closeFullscreenHelp);
+$('fullscreenHelp').addEventListener('click',e=>{if(e.target===$('fullscreenHelp'))closeFullscreenHelp();});
 document.addEventListener('fullscreenchange',updateFullscreenLabel);
 document.addEventListener('webkitfullscreenchange',updateFullscreenLabel);
 $('helpBtn').addEventListener('click',()=>{document.querySelector('.instructions').scrollIntoView({behavior:'smooth',block:'center'});});$('startBtn').addEventListener('click',startRound);$('correctBtn').addEventListener('click',()=>answer('correct'));$('skipBtn').addEventListener('click',()=>answer('skip'));$('pauseBtn').addEventListener('click',pause);$('resetTiltBtn').addEventListener('click',resetTilt);$('resumeBtn').addEventListener('click',resume);$('endBtn').addEventListener('click',endRound);$('againBtn').addEventListener('click',startRound);$('homeBtn').addEventListener('click',()=>{roundId++;active=false;clearInterval(ticker);showScreen('home')});
