@@ -1,4 +1,4 @@
-const VERSION = 'bol-bhai-v3';
+const VERSION = 'bol-bhai-v4';
 const ASSETS = ['./', './index.html', './icon.svg', './apple-touch-icon.png', './manifest.webmanifest'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(VERSION).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
