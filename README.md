@@ -1,19 +1,26 @@
-# Bol Bhai! 🎉
+# Bol Bhai! — The Indian party guessing game
 
-An easy-to-play, browser-based Heads Up-style guessing game for Indian game nights. Includes 2,000+ words and prompts across everyday English, Bollywood, Indian food, cricket, travel, and more.
+A quick one-phone Heads Up-style guessing game built for Indian game nights.
 
-- Simple mobile-first interface
-- 9 mix-and-match categories
-- Timed rounds with Correct and Pass controls
-- Optional motion/tilt control, plus swipe and tap controls
-- No accounts, no server, and no external runtime dependencies
+**Play:** https://ronitjadhav.github.io/bol-bhai/
 
-## Play
+## Features
+- Over 2,000 prompts in 9 decks: everyday English, household objects, Indian food, actions, nature, travel, Bollywood movies, celebrities, India and cricket
+- Responsive, landscape-first mobile interface with big, legible cards and left/right answer controls
+- Orange (`#FF6600`) and charcoal visual language
+- Tilt down for **Correct**, tilt up for **Pass**, return the phone to neutral to advance
+- 30-, 60-, 90- and 120-second rounds with large timer and pause/resume
+- Correct/Pass feedback displayed for about 1.15 seconds
+- Local preferences, installable web app, offline caching and no accounts
 
-Open `index.html` in a browser to play locally.
+## iPhone / fullscreen
 
-## Publish on GitHub Pages
+iPhone Safari does **not** support regular web-page fullscreen. Open the game in **Safari → Share → Add to Home Screen**, select **Open as Web App**, and launch it from the Home Screen for a browser-chrome-free experience. iOS may still show some system UI. iOS may request permission to access motion sensors on the first round.
 
-Create a **public** repository called **`bol-bhai`** under **`ronitjadhav`**, then upload everything from this folder **including `.github/workflows/pages.yml`** to the `main` branch. In repository **Settings → Pages**, set the source to **GitHub Actions**. The workflow deploys on every push to `main`.
+## Development
 
-Expected project site: <https://ronitjadhav.github.io/bol-bhai/> (unless your GitHub Pages domain configuration changes the address).
+Static HTML, CSS and JavaScript, no build tools required. Run `python3 -m http.server 8000` and open http://localhost:8000 or use any simple local web server. GitHub Actions deploys the site from `main`. The service worker caches the game for offline use after a successful visit.
+
+## Design note
+
+Orange `#FF6600` is an approximate KTM-style accent. The precise KartenLabs orange could not be independently checked when this version was made.
